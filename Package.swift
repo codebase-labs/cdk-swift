@@ -9,7 +9,7 @@ let package = Package(
         .library(name: "CDK", targets: ["CDK"]),
     ],
     targets: [
-        .target(name: "ic0", dependencies: []),
-        .target(name: "CDK", dependencies: ["ic0"]),
+        .target(name: "IC", dependencies: []),
+        .target(name: "CDK", dependencies: ["IC"]),
     ]
 )

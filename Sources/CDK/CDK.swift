@@ -1,5 +1,6 @@
-import ic0
+import IC
 
+@_cdecl("time")
 public func time() -> Int64 {
-    ic0.time()
+    IC.time()
 }
