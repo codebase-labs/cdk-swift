@@ -1,7 +1,6 @@
 {
   inputs = {
-    # nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
-    nixpkgs.url = "github:stephank/nixpkgs?ref=feat/swift-darwin";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
 
     crane = {
       url = "github:ipetkov/crane";
@@ -37,7 +36,6 @@
     flake-utils,
     ic-repl-src,
     rust-overlay,
-    ...
   }:
     let
       supportedSystems = [
@@ -124,8 +122,10 @@
             inputsFrom = builtins.attrValues self.checks;
             nativeBuildInputs = with pkgs; [
               dfinitySdk
-              swift
             ];
+            shellHook = ''
+              export PATH=/Library/Developer/Toolchains/swift-wasm-5.6.0-RELEASE.xctoolchain/usr/bin:"$PATH";
+            '';
           };
         });
 }
