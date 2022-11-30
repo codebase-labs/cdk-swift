@@ -125,6 +125,8 @@
             ];
           };
 
+          # TODO: swift-wasm wrapper around swift that adds --triple flag
+
           # wasm-snip-wasi input.wasm --output output.wasm
           wasm-snip-wasi = pkgs.runCommand "wasm-snip-wasi" {
             buildInputs = [
