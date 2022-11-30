@@ -202,6 +202,8 @@
               inputsFrom = builtins.attrValues self.checks;
               nativeBuildInputs = [
                 dfinitySdk
+                ic-wasm
+                pkgs.wabt
                 wasm-snip-wasi
               ];
               shellHook = ''

@@ -15,3 +15,12 @@ swift build --triple wasm32-unknown-wasi
 ```
 wasm-snip-wasi input.wasm --output output.wasm
 ```
+
+```
+ic-wasm --output output.wasm input.wasm shrink
+```
+
+```
+wasm2wat input.wasm --output output.wat
+```
+
