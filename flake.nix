@@ -107,6 +107,14 @@
             ];
           };
 
+          swift-wasm = pkgs.writeShellApplication {
+            name = "swift-wasm";
+            runtimeInputs = [];
+            text = ''
+              swift "$@" --triple wasm32-unknown-wasi
+            '';
+          };
+
           wasm-snip = craneLib.buildPackage {
             src = pkgs.stdenv.mkDerivation {
               name = "wasm-snip-src";
@@ -124,8 +132,6 @@
               pkgs.libiconv
             ];
           };
-
-          # TODO: swift-wasm wrapper around swift that adds --triple flag
 
           # wasm-snip-wasi input.wasm --output output.wasm
           wasm-snip-wasi = pkgs.runCommand "wasm-snip-wasi" {
@@ -204,6 +210,7 @@
                 dfinitySdk
                 ic-wasm
                 pkgs.wabt
+                swift-wasm
                 wasm-snip-wasi
               ];
               shellHook = ''
