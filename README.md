@@ -9,7 +9,7 @@ nix develop
 ```
 
 ```
-swift build --triple wasm32-unknown-wasi
+swift build -c release --triple wasm32-unknown-wasi
 ```
 
 ```
