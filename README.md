@@ -24,3 +24,6 @@ ic-wasm --output output.wasm input.wasm shrink
 wasm2wat input.wasm --output output.wat
 ```
 
+```
+gzip --to-stdout --best input.wasm > output.wasm.gz
+```
