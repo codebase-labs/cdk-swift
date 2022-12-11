@@ -6,24 +6,7 @@ Swift Canister Development Kit for the Internet Computer.
 
 ```
 nix develop
-```
-
-```
-swift build -c release --triple wasm32-unknown-wasi
-```
-
-```
-wasm-snip-wasi input.wasm --output output.wasm
-```
-
-```
-ic-wasm --output output.wasm input.wasm shrink
-```
-
-```
-wasm2wat input.wasm --output output.wat
-```
-
-```
-gzip --to-stdout --best input.wasm > output.wasm.gz
+cd Examples/API
+build API
+ls .build/wasm32-unknown-wasi/release/API.wasm.gz
 ```

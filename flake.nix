@@ -75,6 +75,23 @@
           craneLib = (crane.mkLib pkgs).overrideToolchain rust;
           # craneLib = crane.lib."${system}";
 
+          build = pkgs.writeShellApplication {
+            name = "build";
+            runtimeInputs = [
+              ic-wasm
+              swift-wasm
+              wasm-snip-wasi
+            ];
+            text = ''
+              BUILD_DIR=.build/wasm32-unknown-wasi/release
+              swift-wasm build -c release
+              wasm-snip-wasi "$BUILD_DIR/$1.wasm" --output "$BUILD_DIR/$1-snipped.wasm"
+              ic-wasm --output "$BUILD_DIR/$1-snipped-shrunk.wasm" "$BUILD_DIR/$1-snipped.wasm" shrink
+              wasm2wat "$BUILD_DIR/$1-snipped-shrunk.wasm" --output "$BUILD_DIR/$1-snipped-shrunk.wat"
+              gzip --to-stdout --best "$BUILD_DIR/$1-snipped-shrunk.wasm" > "$BUILD_DIR/$1.wasm.gz"
+            '';
+          };
+
           ic-repl = craneLib.buildPackage {
             src = ic-repl-src;
             nativeBuildInputs = [
@@ -207,6 +224,7 @@
             devShell = pkgs.mkShell {
               inputsFrom = builtins.attrValues self.checks;
               nativeBuildInputs = [
+                build
                 dfinitySdk
                 ic-wasm
                 pkgs.wabt
