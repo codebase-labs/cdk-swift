@@ -7,6 +7,6 @@ Swift Canister Development Kit for the Internet Computer.
 ```
 nix develop
 cd Examples/API
-build API
-ls .build/wasm32-unknown-wasi/release/API.wasm.gz
+cdk-swift-build API
+cdk-swift-test API
 ```

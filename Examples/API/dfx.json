@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "dfx": "0.12.0-beta.2",
+  "canisters": {
+    "API_backend": {
+      "type": "custom",
+      "candid": "API.did",
+      "wasm": ".build/wasm32-unknown-wasi/release/API.wasm.gz"
+    }
+  }
+}
