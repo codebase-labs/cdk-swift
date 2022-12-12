@@ -59,10 +59,10 @@
           }).makeVersion {
             systems = {
               "x86_64-darwin" = {
-                sha256 = "sha256-5F70Hc57NSEuOadM8/ZnFXKGzBmazdU044cNpQmQhDI=";
+                sha256 = "sha256-HZ6CZijd4PAAagVoRgxtSkVPwwT1jpPKvghBwwlz3Vw=";
               };
             };
-            version = "0.12.0-beta.2";
+            version = "0.12.1";
           };
 
           rust = pkgs.rust-bin.stable.latest.default;
