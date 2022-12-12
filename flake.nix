@@ -85,31 +85,10 @@
             text = ''
               BUILD_DIR=.build/wasm32-unknown-wasi/release
               swift-wasm build -c release
-              wasm-snip-wasi "$BUILD_DIR/$1.wasm" --output "$BUILD_DIR/$1-snipped.wasm"
-              ic-wasm --output "$BUILD_DIR/$1-snipped-shrunk.wasm" "$BUILD_DIR/$1-snipped.wasm" shrink
-              wasm2wat "$BUILD_DIR/$1-snipped-shrunk.wasm" --output "$BUILD_DIR/$1-snipped-shrunk.wat"
-              gzip --to-stdout --best "$BUILD_DIR/$1-snipped-shrunk.wasm" > "$BUILD_DIR/$1.wasm.gz"
-            '';
-          };
-
-          cdk-swift-test = pkgs.writeShellApplication {
-            name = "cdk-swift-test";
-            runtimeInputs = [
-              dfinitySdk
-            ];
-            text = ''
-              set -e
-
-              HOME=$TMPDIR
-
-              trap "EXIT_CODE=\$? dfx stop && exit \$EXIT_CODE" EXIT
-
-              dfx start --background --host 127.0.0.1:0
-              WEBSERVER_PORT=$(dfx info webserver-port)
-
-              dfx deploy --network "http://127.0.0.1:$WEBSERVER_PORT" --no-wallet API_backend
-
-              dfx stop
+              wasm-snip-wasi "$BUILD_DIR/$1.wasm" --output "$BUILD_DIR/$1.wasm"
+              # ic-wasm --output "$BUILD_DIR/$1.wasm" "$BUILD_DIR/$1.wasm" shrink
+              wasm2wat "$BUILD_DIR/$1.wasm" --output "$BUILD_DIR/$1.wat"
+              gzip --to-stdout --best "$BUILD_DIR/$1.wasm" > "$BUILD_DIR/$1.wasm.gz"
             '';
           };
 
