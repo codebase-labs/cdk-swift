@@ -7,6 +7,6 @@ public func print(_ message: String) {
     }
 }
 
-public func time() -> Int64 {
-    IC.time()
-}
+// public func time() -> Int64 {
+//     IC.time()
+// }
