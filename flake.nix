@@ -84,7 +84,7 @@
             ];
             text = ''
               BUILD_DIR=.build/wasm32-unknown-wasi/release
-              swift-wasm build -c release
+              swift-wasm build -c release -Xlinker --export=canister_init
               wasm-snip-wasi "$BUILD_DIR/$1.wasm" --output "$BUILD_DIR/$1.wasm"
               ic-wasm --output "$BUILD_DIR/$1.wasm" "$BUILD_DIR/$1.wasm" shrink
               wasm2wat "$BUILD_DIR/$1.wasm" --output "$BUILD_DIR/$1.wat"
