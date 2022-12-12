@@ -86,7 +86,7 @@
               BUILD_DIR=.build/wasm32-unknown-wasi/release
               swift-wasm build -c release
               wasm-snip-wasi "$BUILD_DIR/$1.wasm" --output "$BUILD_DIR/$1.wasm"
-              # ic-wasm --output "$BUILD_DIR/$1.wasm" "$BUILD_DIR/$1.wasm" shrink
+              ic-wasm --output "$BUILD_DIR/$1.wasm" "$BUILD_DIR/$1.wasm" shrink
               wasm2wat "$BUILD_DIR/$1.wasm" --output "$BUILD_DIR/$1.wat"
               gzip --to-stdout --best "$BUILD_DIR/$1.wasm" > "$BUILD_DIR/$1.wasm.gz"
             '';
