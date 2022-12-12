@@ -225,7 +225,6 @@
               inputsFrom = builtins.attrValues self.checks;
               nativeBuildInputs = [
                 cdk-swift-build
-                cdk-swift-test
                 dfinitySdk
                 ic-wasm
                 pkgs.wabt
