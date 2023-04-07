@@ -79,15 +79,32 @@
             name = "cdk-swift-build";
             runtimeInputs = [
               ic-wasm
+              pkgs.gnused
               swift-wasm
               wasm-snip-wasi
             ];
             text = ''
-              BUILD_DIR=.build/wasm32-unknown-wasi/release
-              swift-wasm build -c release -Xlinker --export=canister_init
+              BUILD_DIR=.build/release
+              swift-wasm build -c release -Xswiftc -Osize
+
+              # TODO: use walrus crate instead of wat and sed
+
+              wasm2wat "$BUILD_DIR/$1.wasm" --generate-names --output "$BUILD_DIR/$1.wat"
+              sed --in-place --null-data --regexp-extended "s/(call \\\$(_start|__wasilibc_populate_preopens|__stdio_exit|_GLOBAL__sub_I_GlobalObjects.cpp))/(; \1 ;)/g" "$BUILD_DIR/$1.wat"
+              sed --in-place --null-data --regexp-extended "s/(call \\\$(__imported_wasi_snapshot_preview1_environ_sizes_get|__imported_wasi_snapshot_preview1_environ_get))/(; \1 ;)\n    drop\n    drop\n    i32.const 0/g" "$BUILD_DIR/$1.wat"
+              sed --in-place --null-data --regexp-extended "s/\(export \"(_start|memory)\"[^\n]+/\(; \0 ;\)/gm" "$BUILD_DIR/$1.wat"
+              sed --in-place --null-data --regexp-extended "s/(i32\.const 71\n\s+)(call \\\$_Exit\n\s+unreachable)(\n?\s*\))/\1\(; \2 ;\)\3/g" "$BUILD_DIR/$1.wat"
+              sed --in-place --null-data --regexp-extended "s/(call \\\$(_Exit|__wasi_proc_exit|__imported_wasi_snapshot_preview1_proc_exit)\n\s+)(unreachable)(\n?\s*\))/\1\(; \3 ;\)\4/g" "$BUILD_DIR/$1.wat"
+              wat2wasm "$BUILD_DIR/$1.wat" --debug-names --output "$BUILD_DIR/$1.wasm"
+
+              # Stack traces (at least in the browser) are much nicer without
+              # any of the post-processing that follows.
+
               wasm-snip-wasi "$BUILD_DIR/$1.wasm" --output "$BUILD_DIR/$1.wasm"
               ic-wasm --output "$BUILD_DIR/$1.wasm" "$BUILD_DIR/$1.wasm" shrink
-              wasm2wat "$BUILD_DIR/$1.wasm" --output "$BUILD_DIR/$1.wat"
+
+              wasm2wat "$BUILD_DIR/$1.wasm" --generate-names --output "$BUILD_DIR/$1.snipped.wat"
+
               gzip --to-stdout --best "$BUILD_DIR/$1.wasm" > "$BUILD_DIR/$1.wasm.gz"
             '';
           };
@@ -158,6 +175,7 @@
           } ''
               makeWrapper ${wasm-snip}/bin/wasm-snip $out/bin/wasm-snip-wasi \
                 --append-flags "\
+                  __exported_start \
                   __imported_wasi_snapshot_preview1_args_get \
                   __imported_wasi_snapshot_preview1_args_sizes_get \
                   __imported_wasi_snapshot_preview1_clock_res_get \

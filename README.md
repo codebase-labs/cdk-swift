@@ -14,3 +14,9 @@ dfx start --clean --host 127.0.0.1:0
 ```
 dfx deploy --network http://127.0.0.1:$(dfx info webserver-port) --no-wallet API_backend
 ```
+
+To debug Wasm in the browser:
+
+```
+python3 -m http.server 1234
+```

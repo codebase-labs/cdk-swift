@@ -1,12 +1,12 @@
 import IC
 
 public func print(_ message: String) {
-    withUnsafePointer(to: message) { src in
-      let size = Int32(MemoryLayout.size(ofValue: message))
-      IC.debug_print(src, size)
+    message.withCString { body in
+        let size = Int32(message.utf8.count)
+        IC.ic0_debug_print(body, size)
     }
 }
 
-// public func time() -> Int64 {
-//     IC.time()
-// }
+public func time() -> UInt64 {
+    IC.ic0_time()
+}

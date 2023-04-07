@@ -12,6 +12,14 @@ let package = Package(
     .package(name: "CDK", path: "../../")
   ],
   targets: [
-    .executableTarget(name: "API", dependencies: ["CDK"])
+    .executableTarget(
+      name: "API",
+      dependencies: ["CDK"],
+      linkerSettings: [
+        .unsafeFlags([
+          "-Xlinker", "--export=canister_init",
+        ]),
+      ]
+    )
   ]
 )
